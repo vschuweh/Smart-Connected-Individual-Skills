@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+    <head>
+        <title>CanvasJS Skill</title>
+        <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+    </head>
+
+    <body>
+    <center>  <h1> CanvasJS Stock Values</h1> <br> </center>
+        <div id="graph1" style="height: 300px; width: 100%;"></div>
+        <br></br>
+        <div id="graph2" style="height: 300px; width: 100%;"></div>
+        <script>
+        var amazon = [];
+        var facebook = [];
+        var google = [];
+        var microsoft = [];
+        window.onload = function() {
+            var lineGraph = new CanvasJS.Chart("graph1", {
+                theme: "dark2",
+                //exportEnabled: true,
+                animationEnabled: true,
+                axisY: {
+                    includeZero: false
+                },
+                data: [
+                {
+                    type: "spline",
+                    showInLegend: true,
+                    name: "Amazon",
+                    dataPoints: amazon,
+                    markerType: "square"
+                },
+                {
+                    type: "spline",
+                    showInLegend: true,
+                    name: "Facebook",
+                    dataPoints: facebook,
+                    markerType: "square"
+                },
+                {
+                    type: "spline",
+                    showInLegend: true,
+                    name: "Google",
+                    dataPoints: google,
+                    markerType: "square"
+                },
+                {
+                    type: "spline",
+                    showInLegend: true,
+                    name: "Microsoft",
+                    dataPoints: microsoft,
+                    markerType: "square"
+                }
+            ]
+            });  
+        lineGraph.render();
+
+        var barGraph = new CanvasJS.Chart("graph2", {
+                theme: "dark2",
+                //exportEnabled: true,
+                animationEnabled: true,
+                axisY: {
+                    includeZero: false
+                },
+                data: [
+                {
+                    type: "bar",
+                    showInLegend: true,
+                    name: "Amazon",
+                    dataPoints: amazon,
+                    markerType: "square"
+                },
+                {
+                    type: "bar",
+                    showInLegend: true,
+                    name: "Facebook",
+                    dataPoints: facebook,
+                    markerType: "square"
+                },
+                {
+                    type: "bar",
+                    showInLegend: true,
+                    name: "Google",
+                    dataPoints: google,
+                    markerType: "square"
+                },
+                {
+                    type: "bar",
+                    showInLegend: true,
+                    name: "Microsoft",
+                    dataPoints: microsoft,
+                    markerType: "square"
+                }
+            ]
+            });  
+        barGraph.render();
+        }
+        </script>
+        <script>
+            var socket = io();
+            var amazon_pts = [];
+            var facebook_pts = [];
+            var google_pts = [];
+            var microsoft_pts = [];
+            socket.on('transmit_data', function(data){
+                for (i = 0; i < data.length-1; i = i + 4) {
+                    amazon_pts = data[i].split(',');
+                    facebook_pts = data[i+1].split(',');
+                    google_pts = data[i+2].split(',');
+                    microsoft_pts = data[i+3].split(',');
+                    amazon.push({
+                        x: parseFloat(amazon_pts[0]),
+                        y: parseFloat(amazon_pts[2])
+                    });
+                    facebook.push({
+                        x: parseFloat(facebook_pts[0]),
+                        y: parseFloat(facebook_pts[2])
+                    });
+                    google.push({
+                        x: parseFloat(google_pts[0]),
+                        y: parseFloat(google_pts[2])
+                    });
+                    microsoft.push({
+                        x: parseFloat(microsoft_pts[0]),
+                        y: parseFloat(microsoft_pts[2])
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>

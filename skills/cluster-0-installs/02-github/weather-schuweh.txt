@@ -1,0 +1,6 @@
+3 Day weather report Boston
+Sep 6- high:67 Low:59
+Sep 7- high:67 Low:59
+Sep 8- high:75 low:56
+
+Dow stock exchange value: 26,819.84
